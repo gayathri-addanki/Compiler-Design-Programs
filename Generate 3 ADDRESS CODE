@@ -1,0 +1,57 @@
+threeaddr.l (File name)
+%{
+#include<stdio.h>
+#include "threeaddr.tab.h"
+%}
+%%
+[0-9]+ {yylval.dval=yytext[0]; return NUM;}
+\n {return 0;}
+. {return yytext[0];}
+%%
+int yywrap()
+{
+return 1;
+}
+
+threeaddr.y(another file name)
+
+%{
+#include<stdio.h>
+#include<stdlib.h>
+char ch='a';
+char gencode(char, char, char);
+%}
+%union {
+char dval;
+}
+%token <dval> NUM
+%type <dval> E
+%left '+' '-'
+%left '*' '/'
+%%
+statement: E{printf("\nr = %c",$1);}
+;
+E : E'+'E{$$=gencode($1,'+',$3);}
+ | E'-'E {$$=gencode($1,'-',$3);}
+ | E''E {$$=gencode($1,'',$3);}
+ | E '/'E {$$=gencode($1,'/',$3);}
+ | '(' E')'{$$=$2;}
+ | NUM {$$=$1;}
+ ;
+%%
+void yyerror(char* str)
+{
+printf("\n%s",str);
+}
+char gencode(char first, char op, char second)
+{
+printf("\n%c = %c %c %c\n", ch, first, op, second);
+return ch++;
+}
+main()
+{
+printf("Enter arithmetic expression:");
+yyparse();
+return 0;
+}
+
