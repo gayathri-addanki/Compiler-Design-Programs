@@ -1,0 +1,87 @@
+expr.l(File Name)
+%{
+
+#include "expr.tab.h"
+
+#include "stdlib.h"
+
+extern yylval;
+
+%}
+%%
+
+[0-9]+ { yylval = atoi(yytext); return NUMBER; }
+
+[a-zA-Z]+ return ID;}
+
+[\t]+;
+
+\n { return 0; }
+
+.{ return yytext [0]; }
+
+%%
+
+int yywrap)
+
+{
+
+return 1;
+
+}
+
+Expr.y(File Name)
+% {
+
+#include <stdio.h>
+
+#include <stdlib.h>
+
+%}
+
+% token NUMBER ID
+
+% left ‘+’ ‘-’
+
+% left ‘*’ ‘/’
+
+%%
+
+expr: expr '+' expr
+
+I expr ‘-’ expr
+
+I expr '*'expr
+
+I expr ‘/’ expr
+
+|NUMBER
+
+|’-’ ID
+
+|'(' expr ')'
+
+I NUMBER
+
+| ID
+;
+%%
+
+main()
+
+printf("Enter the expression \n ");
+
+yy parse();
+
+printf ("\n Expression is Valid \n");
+
+exit (0);
+}
+
+int yyerror (char *s) {
+
+printf ("\n Expression is invalid ");
+
+exit(0);
+ }
+
