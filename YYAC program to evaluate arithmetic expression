@@ -1,0 +1,80 @@
+expr.y(File Nmae)
+%{
+
+#include <stdio.h>
+
+#include <stdlib.h>
+
+%}
+
+% token NUMBER
+
+% left '+''-'
+
+% left ‘*’ ‘/’ ‘%’
+%left ‘(‘ ‘)’
+
+%%
+
+s: expr { printf ("\n Result: %d", $$); return 0; }
+
+expr: expr '+' expr {$$ = $1 +$3;}
+
+I expr’-’expr {$$=$1-$3;}
+I expr’*’expr {$$=$1*$3;}
+
+
+I expr ‘/’expr {$$ = $1/ $3;}
+
+I expr '%' expr {$$=$1%$3;}
+
+|’-’NUMBER {$$=-$2;}
+
+|'(' expr')' {$$ = $2;}
+
+I NUMBER {$$= $1;}
+
+;
+%%
+main ()
+{
+
+printf("Enter the expression \n"); 
+yyparse();
+
+printf ("\n Expression is valid \n");
+
+exit (0);
+
+}
+
+Int yyerror (char *s)
+{
+printf(" Expression is invalid");
+
+exit (0);
+}
+
+Expr.l(File Name)
+%{
+
+#include" expr. tab.h"
+
+#Include "stdlib.h”
+
+extern yyval;
+
+%}
+
+%%
+
+[0-9]+ { yyval = atoi (yytext); return NUMBER}
+
+[\t]+ ;
+\n  {return 0;}
+.{return yytext[0];}
+%%
+int yywrap ()
+ {
+return 1;
+}
